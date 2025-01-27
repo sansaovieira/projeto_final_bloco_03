@@ -39,13 +39,13 @@ export const DeleteCategoria = () => {
                 headers: { "Content-Type": "application/json" },
             })
 
-            ToastAlerta('Tema apagado com sucesso', "sucesso")
+            ToastAlerta('Categoria apagado com sucesso', "sucesso")
 
         } catch (error: any) {
             if (error.toString().includes('403')) {
                 navigate("/");
             }else {
-                ToastAlerta('Erro ao deletar o tema.', "erro")
+                ToastAlerta('Erro ao deletar a Categoria.', "erro")
             }
         }
 

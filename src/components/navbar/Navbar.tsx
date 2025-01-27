@@ -39,10 +39,10 @@ export const Navbar = () => {
             <Link to="" className="hover:underline">
               Produtos
             </Link>
-            <Link to="" className="hover:underline">
+            <Link to="/categorias" className="hover:underline">
               Categorias
             </Link>
-            <Link to="" className="hover:underline">
+            <Link to="/cadastrarCategoria" className="hover:underline">
               Cadastrar Categoria
             </Link>
             <Link to="" className="hover:underline">

@@ -51,12 +51,12 @@ export const FormCategoria = () => {
         await atualizar(`/categorias`, categoria, setCategoria, {
           headers: { "Content-Type": "application/json" },
         });
-        ToastAlerta("O Tema foi atualizado com sucesso!", "sucesso");
+        ToastAlerta("A Categoria foi atualizado com sucesso!", "sucesso");
       } catch (error: any) {
         if (error.toString().includes("403")) {
           navigate("/");
         } else {
-          ToastAlerta("Erro ao atualizar o tema.", "erro");
+          ToastAlerta("Erro ao atualizar a Categoria.", "erro");
         }
       }
     } else {
@@ -64,12 +64,12 @@ export const FormCategoria = () => {
         await cadastrar(`/categorias`, categoria, setCategoria, {
           headers: { "Content-Type": "application/json" },
         });
-        ToastAlerta("O Tema foi cadastrado com sucesso!", "sucesso");
+        ToastAlerta("A Categoria foi cadastrado com sucesso!", "sucesso");
       } catch (error: any) {
         if (error.toString().includes("403")) {
           navigate("/");
         } else {
-          ToastAlerta("Erro ao cadastrar o tema.", "erro");
+          ToastAlerta("Erro ao cadastrar a Categoria.", "erro");
         }
       }
     }
