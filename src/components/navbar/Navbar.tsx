@@ -1,6 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export const Navbar = () => {
+
+  const location = useLocation();
+
+  const getNavLinkClass = (path: string) => {
+    return location.pathname === path
+      ? "hover:underline text-yellow-300"
+      : "hover:underline"
+  }
   return (
     <>
       <div
@@ -15,7 +23,7 @@ export const Navbar = () => {
             <input
               type="text"
               placeholder="Buscar produtos..."
-              className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+              className="mt-1 block w-full px-3 py-2 bg-white text-black border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
                         focus:outline-none focus:border-violet-500 focus:ring-1 focus:violet-500"
             />
             <button type="submit" className="ml-2">
@@ -36,19 +44,19 @@ export const Navbar = () => {
             </button>
           </form>
           <div className="flex gap-4">
-            <Link to="" className="hover:underline">
+            <Link to="" className={getNavLinkClass("")}>
               Produtos
             </Link>
-            <Link to="/categorias" className="hover:underline">
+            <Link to="/categorias" className={getNavLinkClass("/categorias")}>
               Categorias
             </Link>
-            <Link to="/cadastrarCategoria" className="hover:underline">
+            <Link to="/cadastrarCategoria" className={getNavLinkClass("/cadastrarCategoria")}>
               Cadastrar Categoria
             </Link>
-            <Link to="" className="hover:underline">
+            <Link to="/" className={getNavLinkClass("")}>
               Sair
             </Link>
-            <Link to="" className="hover:underline">
+            <Link to="" className={getNavLinkClass("")}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

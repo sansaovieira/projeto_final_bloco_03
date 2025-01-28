@@ -6,11 +6,9 @@ import { ToastAlerta } from "../../../utils/ToastAlerta";
 import { RotatingLines } from "react-loader-spinner";
 
 export const FormCategoria = () => {
-  const navigate = useNavigate();
-
   const [categoria, setCategoria] = useState<Categoria>({} as Categoria);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
   async function buscarPorId(id: string) {
@@ -21,6 +19,8 @@ export const FormCategoria = () => {
     } catch (error: any) {
       if (error.toString().includes("403")) {
         navigate("/");
+      } else {
+        ToastAlerta("Erro ao carregar a categoria.", "erro");
       }
     }
   }
@@ -46,31 +46,23 @@ export const FormCategoria = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (id !== undefined) {
-      try {
-        await atualizar(`/categorias`, categoria, setCategoria, {
+    try {
+      if (id !== undefined) {
+        await atualizar(`/categorias/${id}`, categoria, setCategoria, {
           headers: { "Content-Type": "application/json" },
         });
-        ToastAlerta("A Categoria foi atualizado com sucesso!", "sucesso");
-      } catch (error: any) {
-        if (error.toString().includes("403")) {
-          navigate("/");
-        } else {
-          ToastAlerta("Erro ao atualizar a Categoria.", "erro");
-        }
-      }
-    } else {
-      try {
+        ToastAlerta("A Categoria foi atualizada com sucesso!", "sucesso");
+      } else {
         await cadastrar(`/categorias`, categoria, setCategoria, {
           headers: { "Content-Type": "application/json" },
         });
-        ToastAlerta("A Categoria foi cadastrado com sucesso!", "sucesso");
-      } catch (error: any) {
-        if (error.toString().includes("403")) {
-          navigate("/");
-        } else {
-          ToastAlerta("Erro ao cadastrar a Categoria.", "erro");
-        }
+        ToastAlerta("A Categoria foi cadastrada com sucesso!", "sucesso");
+      }
+    } catch (error: any) {
+      if (error.toString().includes("403")) {
+        navigate("/");
+      } else {
+        ToastAlerta("Erro ao atualizar ou cadastrar a categoria.", "erro");
       }
     }
 
@@ -79,50 +71,40 @@ export const FormCategoria = () => {
   }
 
   return (
-    <div>
-      <div className="container flex flex-col items-center justify-center mx-auto">
-        <h1 className="text-4xl text-center my-8">
-          {id === undefined ? "Cadastrar Categoria" : "Editar Categoria"}
-        </h1>
+    <div className="container flex flex-col items-center justify-center mx-auto">
+      <h1 className="text-4xl text-center my-8">
+        {id === undefined ? "Cadastrar Categoria" : "Editar Categoria"}
+      </h1>
 
-        <form
-          className="w-1/2 flex flex-col gap-4"
-          onSubmit={gerarNovaCategoria}
+      <form className="w-1/2 flex flex-col gap-4" onSubmit={gerarNovaCategoria}>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="descricao">Descrição da Categoria</label>
+          <input
+            type="text"
+            placeholder="Descreva aqui a Categoria"
+            name="descricao"
+            className="bmt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-violet-500 focus:ring-1 focus:violet-500"
+            value={categoria.descricao || ""}
+            onChange={atualizarEstado}
+          />
+        </div>
+        <button
+          className="mx-auto rounded-full w-1/2 text-white bg-green-700 hover:bg-green-900 py-2 flex justify-center duration-700"
+          type="submit"
         >
-          <div className="flex flex-col gap-2">
-            <label htmlFor="descricao">Descrição da Categoria</label>
-            <input
-              type="text"
-              placeholder="Descreva aqui a Categoria"
-              name="descricao"
-              className="bmt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-      focus:outline-none focus:border-violet-500 focus:ring-1 focus:violet-500"
-              value={categoria.descricao}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                atualizarEstado(e)
-              }
+          {isLoading ? (
+            <RotatingLines
+              strokeColor="white"
+              strokeWidth="5"
+              animationDuration="0.75"
+              width="24"
+              visible={true}
             />
-          </div>
-          <button
-            className="mx-auto rounded-full w-1/2 text-white bg-indigo-400 
-                                   hover:bg-indigo-600 py-2
-                                   flex justify-center duration-700"
-            type="submit"
-          >
-            {isLoading ? (
-              <RotatingLines
-                strokeColor="white"
-                strokeWidth="5"
-                animationDuration="0.75"
-                width="24"
-                visible={true}
-              />
-            ) : (
-              <span>{id === undefined ? "Cadastrar" : "Atualizar"}</span>
-            )}
-          </button>
-        </form>
-      </div>
+          ) : (
+            <span>{id === undefined ? "Cadastrar" : "Atualizar"}</span>
+          )}
+        </button>
+      </form>
     </div>
   );
 };
